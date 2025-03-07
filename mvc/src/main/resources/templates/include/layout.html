@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <meta charset="utf-8">
@@ -7,10 +7,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <title>게시판</title>
 </head>
 <body>
-<th:block th:replace="~{/template/include/header :: headerLayout}"></th:block>
-<th:block th:replace="~{/template/include/nav :: navLayout}"></th:block>
-<th:block layout:fragment="content">
-
-</th:block>
+<th:block th:replace="~{include/header :: headerLayout}"></th:block>
+<th:block th:replace="~{include/nav :: navLayout}"></th:block>
+<div layout:fragment="content"></div>
 </body>
 </html>

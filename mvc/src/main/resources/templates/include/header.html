@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<th:block th:fragmenet="headerLayout">
-		<link th:href="@{/css/include/header.css}" rel="stylesheet">
-		<link th:href="@{/css/include/common.css}" rel="stylesheet">
+	<th:block th:fragment="headerLayout">
+		<link th:href="@{css/include/header.css}" rel="stylesheet">
+		<link th:href="@{css/include/common.css}" rel="stylesheet">
+		<style>
+		section {
+			margin: 30px 0;
+		}
+		#section_wrap .word {
+			width: 1024px;
+			margin: 0 auto;
+			text-align: center;
+		} 
+		</style>
 		<header>
 			<div id="header_wrap">
 				<div class="title">	
