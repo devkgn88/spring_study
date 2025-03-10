@@ -13,7 +13,6 @@ layout:decorate="~{/include/layout}">
 					<form action='/board/create' name="create_board_form" method="post" enctype="multipart/form-data">	
 						<input type="text" name="board_title" placeholder="제목을 입력하세요."> <br>
 						<input type="text" name="board_content" placeholder="내용을 입력하세요."><br>
-						<input type="text" name="board_writer" placeholder="작성자를 입력하세요." value="1"> <br>
 						<input type="submit" value="등록"> 
 					</form>
 				</div>
@@ -32,9 +31,6 @@ layout:decorate="~{/include/layout}">
 				} else if(!form.board_content.value){
 					vali_text += "내용을 입력하세요.";
 					form.board_content.focus();
-				} else if(!form.board_writer.value){
-					vali_text += "작성자를 입력하세요.";
-					form.board_writer.focus();
 				} else{
 					vali_check = true;
 				} 
