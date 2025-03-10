@@ -6,10 +6,10 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.BoardDto;
+import com.gn.mvc.entity.Board;
 
 @Controller
 public class BoardController {
@@ -41,7 +41,7 @@ public class BoardController {
 		resultMap.put("res_code", "404");
 		resultMap.put("res_msg", "게시글 등록중 오류가 발생했습니다.");
 		
-		System.out.println(dto);
+		Board board = dto.toEntity();
 		
 		return resultMap;
 	}
