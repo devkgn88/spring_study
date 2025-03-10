@@ -51,6 +51,19 @@ layout:decorate="~{/include/layout}">
 					}
 				} 
 				
+				if(vali_check == false){
+					alert(vali_text);
+				} else{
+					const payload = new FormData(form);
+					fetch("/board/create",{
+						method : 'post',
+						body : payload
+					})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg);
+					})
+				}
 			}) 
 		</script>
     </th:block>
