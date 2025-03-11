@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gn.mvc.dto.BoardDto;
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.repository.BoardRepository;
+import com.gn.mvc.service.BoardService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class BoardController {
 	
-	@Autowired
-	private BoardRepository boardRepository;
+	private final BoardService boardService;
 	
 	@GetMapping("/board/create")
 	public String createBoardView() {
@@ -47,16 +50,9 @@ public class BoardController {
 		resultMap.put("res_code", "404");
 		resultMap.put("res_msg", "게시글 등록중 오류가 발생했습니다.");
 		
-		// 1. DTO를 엔티티로 변환
-		Board board = dto.toEntity();
-		// 2. DTO가 엔티티로 잘 변환되었는지 확인
-		System.out.println("전 : "+board);
-		// 3. 레포지토리로 엔티티를 DB에 저장
-		Board saved = boardRepository.save(board);
-		// 4. board가 DB에 잘 저장되는지 확인
-		System.out.println("후 : "+saved);
+		BoardDto saved = boardService.createBoard(dto);
 		
-		if(saved.getBoardNo() != null) {
+		if(saved.getBoard_no() != null) {
 			resultMap.put("res_code", "200");
 			resultMap.put("res_msg", "게시글이 등록되었습니다.");
 		}
