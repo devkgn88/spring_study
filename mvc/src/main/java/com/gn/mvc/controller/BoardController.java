@@ -50,11 +50,16 @@ public class BoardController {
 		// 1. DTO를 엔티티로 변환
 		Board board = dto.toEntity();
 		// 2. DTO가 엔티티로 잘 변환되었는지 확인
-		System.out.println(board);
+		System.out.println("전 : "+board);
 		// 3. 레포지토리로 엔티티를 DB에 저장
 		Board saved = boardRepository.save(board);
 		// 4. board가 DB에 잘 저장되는지 확인
-		System.out.println(saved);
+		System.out.println("후 : "+saved);
+		
+		if(saved.getBoardNo() != null) {
+			resultMap.put("res_code", "200");
+			resultMap.put("res_msg", "게시글이 등록되었습니다.");
+		}
 		
 		
 		return resultMap;
