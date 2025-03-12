@@ -1,10 +1,13 @@
 package com.gn.mvc.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +19,6 @@ import lombok.ToString;
 @Table(name="member")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Getter
 @Builder
 public class Member {
@@ -33,4 +35,7 @@ public class Member {
 	
 	@Column(name="member_name")
 	private String memberName;
+	
+	@OneToMany(mappedBy="member")
+	private List<Board> boards;
 }

@@ -1,16 +1,21 @@
 package com.gn.mvc.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.BoardDto;
+import com.gn.mvc.dto.SearchDto;
+import com.gn.mvc.entity.Board;
 import com.gn.mvc.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -63,7 +68,10 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board")
-	public String selectBoardAll() {
+	public String selectBoardAll(Model model, SearchDto dto) {
+		List<Board> resultList = boardService.selectBoardAll(dto);
+		model.addAttribute("boardList", resultList);
+		model.addAttribute("searchDto",dto);
 		return "board/list";
 	}
 }
