@@ -61,4 +61,9 @@ public class BoardController {
 		
 		return resultMap;
 	}
+	
+	@GetMapping("/board")
+	public String selectBoardAll() {
+		return "board/list";
+	}
 }

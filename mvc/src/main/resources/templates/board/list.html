@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorate="~{/include/layout}">
+	<th:block layout:fragment="content">	
+		<link th:href="@{/css/board/list.css}" rel="stylesheet">
+		<section>
+		<div id="section_wrap">
+			<div class="word">
+				<h3>게시글 목록</h3>
+			</div><br>
+			<div class="board_list">
+				<table>
+					<colgroup>
+						<col width="10%">
+						<col width="50%">
+						<col width="20%">
+						<col width="20%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>번호</td>
+							<td>제목</td>
+							<td>작성자</td>
+							<td>작성일시</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>	
+		
+    </th:block>
+</html>
