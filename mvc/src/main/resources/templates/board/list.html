@@ -9,6 +9,12 @@ layout:decorate="~{/include/layout}">
 			<div class="word">
 				<h3>게시글 목록</h3>
 			</div><br>
+			<div style="text-align:right;">
+				<select name="order_type">
+					<option value="1">최신순</option>
+					<option value="2">오래된순</option>
+				</select>
+			</div>
 			<div class="search">
 				<form action="/board" name="search_board_form" method="get" >
 					<select name="search_type">
