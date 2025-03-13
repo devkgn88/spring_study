@@ -53,6 +53,10 @@ section {
 	padding: 10px 3px;
 	text-align: center;
 	} 
+.sort{
+	text-align:right;
+	margin-right:100px;
+}
 .search {
 	height: 70px;
 	line-height: 70px;
