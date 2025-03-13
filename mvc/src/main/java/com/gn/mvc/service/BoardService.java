@@ -1,8 +1,9 @@
 package com.gn.mvc.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,14 +23,19 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	
-	public List<Board> selectBoardAll(SearchDto dto, Pageable pageable){
+	public Page<Board> selectBoardAll(SearchDto dto){
 		
-		List<Board> list = new ArrayList<Board>();
 		Specification<Board> spec = (root,query,criteriaBuilder) -> null; 
-		Sort sort = Sort.by("regDate").descending();
+		Pageable pageable = PageRequest.of(0, 5, Sort.by("regDate").descending());
+		
 		if(dto.getOrder_type() == 2) {
-			sort = Sort.by("regDate").ascending();
+			pageable = PageRequest.of(0, 5, Sort.by("regDate").ascending());
 		}
+		
+//		Sort sort = Sort.by("regDate").descending();
+//		if(dto.getOrder_type() == 2) {
+//			sort = Sort.by("regDate").ascending();
+//		}
 		if(dto.getSearch_type() == 1) {
 //			list = boardRepository.findByBoardTitleContaining(dto.getSearch_text());	
 //			System.out.println("제목 : "+list);
@@ -44,9 +50,8 @@ public class BoardService {
 			spec = spec.and(BoardSpecification.boardTitleContains(dto.getSearch_text()))
 					.or(BoardSpecification.boardContentContains(dto.getSearch_text()));
 		}
-		list = boardRepository.findAll(spec,sort,pageable);
 		
-		return list;
+		return boardRepository.findAll(spec,pageable);
 	}
 	
 	public BoardDto createBoard(BoardDto param) {

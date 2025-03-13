@@ -9,29 +9,23 @@ layout:decorate="~{/include/layout}">
 			<div class="word">
 				<h3>게시글 목록</h3>
 			</div><br>
-			<div class="sort">
-				<select id="order_type" name="order_type">
-					<option value="1">최신순</option>
-					<option value="2">오래된순</option>
-				</select>
-			</div>
-			<script>
-				document.getElementById("order_type").addEventListener("change",function(e){
-					const orderType = e.target.value;
-					location.href="/board?order_type="+orderType;
-				})
-			</script>
-			<div class="search">
-				<form action="/board" name="search_board_form" method="get" >
-					<select name="search_type">
-						<option value="1" th:selected="${searchDto.search_type == 1}">제목</option>
-						<option value="2" th:selected="${searchDto.search_type == 2}">내용</option>
-						<option value="3" th:selected="${searchDto.search_type == 3}">제목+내용</option>
+			<form action="/board" name="search_board_form" method="get" >
+				<div class="sort">
+					<select id="order_type" name="order_type">
+						<option value="1">최신순</option>
+						<option value="2">오래된순</option>
 					</select>
-					<input type="text" th:value="${searchDto.search_text}" name="search_text" placeholder="검색어를 입력하세요.">
-					<input type="submit" value="검색">
-				</form>	
-			</div>
+				</div>
+				<div class="search">
+						<select name="search_type">
+							<option value="1" th:selected="${searchDto.search_type == 1}">제목</option>
+							<option value="2" th:selected="${searchDto.search_type == 2}">내용</option>
+							<option value="3" th:selected="${searchDto.search_type == 3}">제목+내용</option>
+						</select>
+						<input type="text" th:value="${searchDto.search_text}" name="search_text" placeholder="검색어를 입력하세요.">
+						<input type="submit" value="검색">
+				</div>
+			</form>	
 			<div class="board_list">
 				<table>
 					<colgroup>
@@ -64,6 +58,11 @@ layout:decorate="~{/include/layout}">
 			</div>
 		</div>
 	</section>	
-		
+	<script>
+		document.getElementById("order_type").addEventListener("change",function(e){
+			const orderType = e.target.value;
+			location.href="/board?order_type="+orderType;
+		})
+	</script>
     </th:block>
 </html>

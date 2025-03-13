@@ -1,13 +1,14 @@
 package com.gn.mvc.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,10 +72,7 @@ public class BoardController {
 	@GetMapping("/board")
 	public String selectBoardAll(Model model, SearchDto dto) {
 		
-		// 1. Pageable 셋팅하기
-		Pageable pageable = PageRequest.of(0, 5);
-		// 2. Service에 전달하기
-		List<Board> resultList = boardService.selectBoardAll(dto,pageable);
+		Page<Board> resultList = boardService.selectBoardAll(dto);
 		
 		model.addAttribute("boardList", resultList);
 		model.addAttribute("searchDto",dto);
