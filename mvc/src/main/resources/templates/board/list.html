@@ -10,11 +10,17 @@ layout:decorate="~{/include/layout}">
 				<h3>게시글 목록</h3>
 			</div><br>
 			<div class="sort">
-				<select name="order_type">
+				<select id="order_type" name="order_type">
 					<option value="1">최신순</option>
 					<option value="2">오래된순</option>
 				</select>
 			</div>
+			<script>
+				document.getElementById("order_type").addEventListener("change",function(e){
+					const orderType = e.target.value;
+					location.href="/board?order_type="+orderType;
+				})
+			</script>
 			<div class="search">
 				<form action="/board" name="search_board_form" method="get" >
 					<select name="search_type">
