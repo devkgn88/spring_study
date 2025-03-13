@@ -3,6 +3,7 @@ package com.gn.mvc.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	
-	public List<Board> selectBoardAll(SearchDto dto){
+	public List<Board> selectBoardAll(SearchDto dto, Pageable pageable){
+		
 		List<Board> list = new ArrayList<Board>();
 		Specification<Board> spec = (root,query,criteriaBuilder) -> null; 
 		Sort sort = Sort.by("regDate").descending();
@@ -42,7 +44,7 @@ public class BoardService {
 			spec = spec.and(BoardSpecification.boardTitleContains(dto.getSearch_text()))
 					.or(BoardSpecification.boardContentContains(dto.getSearch_text()));
 		}
-		list = boardRepository.findAll(spec,sort);
+		list = boardRepository.findAll(spec,sort,pageable);
 		
 		return list;
 	}

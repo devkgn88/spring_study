@@ -2,6 +2,7 @@ package com.gn.mvc.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,6 +34,6 @@ public interface BoardRepository extends JpaRepository<Board,Long>, JpaSpecifica
 //	List<Board> findByBoardTitleContainingOrBoardContentContaining(String titleKeyword, String contentKeyword);
 			
 	// 3. Specification
-	List<Board> findAll(Specification<Board> spec,Sort sort);
+	List<Board> findAll(Specification<Board> spec,Sort sort,Pageable pageable);
 
 }
