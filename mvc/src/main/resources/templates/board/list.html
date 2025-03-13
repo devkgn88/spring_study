@@ -4,6 +4,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{/include/layout}">
 	<th:block layout:fragment="content">	
 		<link th:href="@{/css/board/list.css}" rel="stylesheet">
+		<link th:href="@{/css/include/paging.css}" rel="stylesheet">
 		<section>
 		<div id="section_wrap">
 			<div class="word">
@@ -58,6 +59,15 @@ layout:decorate="~{/include/layout}">
 			</div>
 		</div>
 	</section>	
+	<div class="center">
+		<div class="pagination">
+			<a href="#">&laquo;</a>
+			<a th:href="@{/board(nowPage=0)}">1</a>
+			<a th:href="@{/board(nowPage=1)}">2</a>
+			<a th:href="@{/board(nowPage=2)}">3</a>
+			<a href="#">&raquo;</a>
+		</div>
+	</div>
 	<script>
 		document.getElementById("order_type").addEventListener("change",function(e){
 			const orderType = e.target.value;

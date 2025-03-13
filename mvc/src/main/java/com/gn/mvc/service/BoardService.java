@@ -23,13 +23,13 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	
-	public Page<Board> selectBoardAll(SearchDto dto){
+	public Page<Board> selectBoardAll(SearchDto dto,int nowPage){
 		
 		Specification<Board> spec = (root,query,criteriaBuilder) -> null; 
-		Pageable pageable = PageRequest.of(0, 5, Sort.by("regDate").descending());
+		Pageable pageable = PageRequest.of(nowPage, 2, Sort.by("regDate").descending());
 		
 		if(dto.getOrder_type() == 2) {
-			pageable = PageRequest.of(0, 5, Sort.by("regDate").ascending());
+			pageable = PageRequest.of(nowPage, 2, Sort.by("regDate").ascending());
 		}
 		
 //		Sort sort = Sort.by("regDate").descending();

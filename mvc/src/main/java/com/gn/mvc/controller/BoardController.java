@@ -6,13 +6,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.BoardDto;
@@ -70,9 +68,10 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board")
-	public String selectBoardAll(Model model, SearchDto dto) {
+	public String selectBoardAll(Model model, SearchDto dto,
+			@RequestParam(name="nowPage", defaultValue="0") int nowPage) {
 		
-		Page<Board> resultList = boardService.selectBoardAll(dto);
+		Page<Board> resultList = boardService.selectBoardAll(dto,nowPage);
 		
 		model.addAttribute("boardList", resultList);
 		model.addAttribute("searchDto",dto);
