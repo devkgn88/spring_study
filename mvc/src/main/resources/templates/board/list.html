@@ -13,8 +13,8 @@ layout:decorate="~{/include/layout}">
 			<form action="/board" name="search_board_form" method="get" >
 				<div class="sort">
 					<select id="order_type" name="order_type">
-						<option value="1">최신순</option>
-						<option value="2">오래된순</option>
+						<option value="1" th:selected="${searchDto.order_type == 1}">최신순</option>
+						<option value="2" th:selected="${searchDto.order_type == 2}">오래된순</option>
 					</select>
 				</div>
 				<div class="search">
@@ -61,11 +61,19 @@ layout:decorate="~{/include/layout}">
 	</section>	
 	<div class="center">
 		<div class="pagination">
-			<a href="#">&laquo;</a>
-			<a th:href="@{/board(nowPage=0)}">1</a>
-			<a th:href="@{/board(nowPage=1)}">2</a>
-			<a th:href="@{/board(nowPage=2)}">3</a>
-			<a href="#">&raquo;</a>
+			<a th:if="${pageDto.prev}" th:href="@{/board(nowPage=${pageDto.pageBarStart-1},search_type=${searchDto.search_type},search_text=${searchDto.search_text})}">
+				&laquo;
+			</a>
+			<th:block th:each="num : ${#numbers.sequence(pageDto.pageBarStart,pageDto.pageBarEnd)}">
+	    		<a class="page-link" th:classappend="${pageDto.nowPage == num} ? 'active'" 
+	    		th:href="@{/board(nowPage=${num},search_type=${searchDto.search_type},search_text=${searchDto.search_text})}"
+	    		th:text="${num}">
+	    		</a>
+	    	</th:block>
+			<a th:if="${pageDto.next}" 
+			th:href="@{/board(nowPage=${pageDto.pageBarEnd+1},search_type=${searchDto.search_type},search_text=${searchDto.search_text})}">
+				&raquo;
+			</a>
 		</div>
 	</div>
 	<script>

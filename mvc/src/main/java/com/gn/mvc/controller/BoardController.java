@@ -10,10 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.BoardDto;
+import com.gn.mvc.dto.PageDto;
 import com.gn.mvc.dto.SearchDto;
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.service.BoardService;
@@ -68,13 +68,17 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board")
-	public String selectBoardAll(Model model, SearchDto dto,
-			@RequestParam(name="nowPage", defaultValue="0") int nowPage) {
+	public String selectBoardAll(Model model, SearchDto searchDto,PageDto pageDto) {
 		
-		Page<Board> resultList = boardService.selectBoardAll(dto,nowPage);
+		if(pageDto.getNowPage() == 0) pageDto.setNowPage(1);
+		
+		Page<Board> resultList = boardService.selectBoardAll(searchDto,pageDto);
+		
+		pageDto.setTotalPage(resultList.getTotalPages());
 		
 		model.addAttribute("boardList", resultList);
-		model.addAttribute("searchDto",dto);
+		model.addAttribute("searchDto",searchDto);
+		model.addAttribute("pageDto",pageDto);
 		return "board/list";
 	}
 }
