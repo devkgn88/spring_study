@@ -22,6 +22,10 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	
+	public Board selectBoardOne(Long id) {
+		return boardRepository.findById(id).orElse(null);
+	}
+	
 	public Page<Board> selectBoardAll(SearchDto searchDto,PageDto pageDto){
 		
 		Specification<Board> spec = (root,query,criteriaBuilder) -> null; 

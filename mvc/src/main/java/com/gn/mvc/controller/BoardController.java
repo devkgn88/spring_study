@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -81,4 +82,13 @@ public class BoardController {
 		model.addAttribute("pageDto",pageDto);
 		return "board/list";
 	}
+	
+	@GetMapping("/board/{id}")
+	public String selectBoardOne(@PathVariable("id") Long id, Model model) {
+		logger.info("게시글 단일 조회 : "+id);
+		Board result = boardService.selectBoardOne(id);
+		model.addAttribute("board", result);
+		return "board/detail";
+	}
+	
 }
