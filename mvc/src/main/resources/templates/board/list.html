@@ -48,8 +48,8 @@ layout:decorate="~{/include/layout}">
 							<td colspan="4">게시글이 없습니다.</td>
 						</tr>
 						<tr th:if="${!#lists.isEmpty(boardList)}"
-							th:each="board : ${boardList}">
-							<td th:text="${board.boardNo}">번호</td>
+							th:each="board, boardStatus : ${boardList}">
+							<td th:text="${(pageDto.numPerPage * (pageDto.nowPage-1))+ boardStatus.count}">번호</td>
 							<td th:text="${board.boardTitle}">제목</td>
 							<td th:text="${board.member.memberName}">작성자</td>
 					      	<td th:text="${#temporals.format(board.regDate, 'yy-MM-dd')}">작성일시</td>
