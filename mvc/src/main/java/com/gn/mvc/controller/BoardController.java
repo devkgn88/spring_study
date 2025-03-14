@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +20,7 @@ import com.gn.mvc.dto.SearchDto;
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.service.BoardService;
 
+import ch.qos.logback.core.joran.spi.HttpUtil.RequestMethod;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -98,19 +100,22 @@ public class BoardController {
 		return "board/update";
 	}
 	
-	@PostMapping("/board/{id}")
+	@PostMapping("/board/{id}/update")
 	@ResponseBody
-	public Map<String,String> updateBoardApi(BoardDto param){
+	public Map<String,String> updateBoardApi(@PathVariable("id") Long id,
+			BoardDto param){
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생했습니다.");
+		
+		param.setBoard_no(id);
 		
 		System.out.println(param);
 		
 		Board saved = boardService.updateBoard(param);
 		if(saved != null) {
 			resultMap.put("res_code", "200");
-			resultMap.put("res_msg", "게시글이 등록되었습니다.");
+			resultMap.put("res_msg", "게시글이 수정되었습니다.");
 		}
 		
 		return resultMap;

@@ -14,7 +14,7 @@ layout:decorate="~{/include/layout}">
 						<input type="hidden" name="board_no" th:value="${board.boardNo}">
 						<input type="text" name="board_title" th:value="${board.boardTitle}" placeholder="제목을 입력하세요."> <br>
 						<input type="text" name="board_content" th:value="${board.boardContent}" placeholder="내용을 입력하세요."><br>
-						<input type="submit" value="등록"> 
+						<input type="submit" value="수정"> 
 					</form>
 				</div>
 			</div>
@@ -40,7 +40,7 @@ layout:decorate="~{/include/layout}">
 				} else{
 					const boardNo = form.board_no.value;
 					const payload = new FormData(form);
-					fetch('/board/'+boardNo,{
+					fetch('/board/'+boardNo+"/update",{
 						method : 'post',
 						body : payload
 					})
