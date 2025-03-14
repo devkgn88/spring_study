@@ -91,4 +91,10 @@ public class BoardController {
 		return "board/detail";
 	}
 	
+	@GetMapping("/board/{id}/update")
+	public String updateBoardView(@PathVariable("id") Long id, Model model) {
+		Board entity = boardService.selectBoardOne(id);
+		model.addAttribute("board",entity);
+		return "board/update";
+	}
 }

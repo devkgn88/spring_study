@@ -43,7 +43,7 @@ layout:decorate="~{/include/layout}">
 					</ul>		
 				</div>
 				<div class="buttons">
-					<a href="">수정</a>
+					<a th:href="@{/board/{id}/update(id=${board.boardNo})}">수정</a>
 					<a href="">삭제</a>			
 				</div>
 			</div>

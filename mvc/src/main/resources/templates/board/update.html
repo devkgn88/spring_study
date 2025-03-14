@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorate="~{/include/layout}">
+	<th:block layout:fragment="content">	
+		<link th:href="@{/css/board/create.css}" rel="stylesheet">
+		<section>
+			<div id="section_wrap">
+				<div class="word">
+					<h3>게시글 수정</h3>
+				</div><br>
+				<div class="register_board_form">
+					<form name="update_board_form">	
+						<input type="text" name="board_title" th:value="${board.boardTitle}" placeholder="제목을 입력하세요."> <br>
+						<input type="text" name="board_content" th:value="${board.boardContent}" placeholder="내용을 입력하세요."><br>
+						<input type="submit" value="등록"> 
+					</form>
+				</div>
+			</div>
+		</section>		
+    </th:block>
+</html>
