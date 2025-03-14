@@ -97,4 +97,22 @@ public class BoardController {
 		model.addAttribute("board",entity);
 		return "board/update";
 	}
+	
+	@PostMapping("/board/{id}")
+	@ResponseBody
+	public Map<String,String> updateBoardApi(BoardDto param){
+		Map<String,String> resultMap = new HashMap<String,String>();
+		resultMap.put("res_code", "500");
+		resultMap.put("res_msg", "게시글 수정중 오류가 발생했습니다.");
+		
+		System.out.println(param);
+		
+		Board saved = boardService.updateBoard(param);
+		if(saved != null) {
+			resultMap.put("res_code", "200");
+			resultMap.put("res_msg", "게시글이 등록되었습니다.");
+		}
+		
+		return resultMap;
+	}
 }

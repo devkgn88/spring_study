@@ -11,6 +11,7 @@ layout:decorate="~{/include/layout}">
 				</div><br>
 				<div class="register_board_form">
 					<form name="update_board_form">	
+						<input type="hidden" name="board_no" th:value="${board.boardNo}">
 						<input type="text" name="board_title" th:value="${board.boardTitle}" placeholder="제목을 입력하세요."> <br>
 						<input type="text" name="board_content" th:value="${board.boardContent}" placeholder="내용을 입력하세요."><br>
 						<input type="submit" value="등록"> 
@@ -18,5 +19,37 @@ layout:decorate="~{/include/layout}">
 				</div>
 			</div>
 		</section>		
+		<script>
+			const form = document.update_board_form;
+			form.addEventListener('submit',(e)=>{
+				e.preventDefault();
+				let vali_check = false;
+				let vali_text='';
+				if(form.board_title.value == ''){
+					vali_text += '제목을 입력하세요.';
+					form.board_title.focus();
+				} else if(form.board_content.value == ''){
+					vali_text += '내용을 입력하세요.';
+					form.board_content.focus();
+				} else{
+					vali_check = true;
+				}
+				
+				if(vali_check == false){
+					alert(vali_text);
+				} else{
+					const boardNo = form.board_no.value;
+					const payload = new FormData(form);
+					fetch('/board/'+boardNo,{
+						method : 'post',
+						body : payload
+					})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg);
+					})
+				}
+			})
+		</script>
     </th:block>
 </html>

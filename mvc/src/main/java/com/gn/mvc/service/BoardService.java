@@ -22,6 +22,17 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	
+	public Board updateBoard(BoardDto param) {
+		Board result = null;
+		// 1. id를 기준으로 타킷 조회
+		Board target = boardRepository.findById(param.getBoard_no()).orElse(null);
+		// 2. 타깃이 존재하는 경우 업데이트
+		if(target != null) {
+			result = boardRepository.save(param.toEntity());
+		}
+		return result;
+	}
+	
 	public Board selectBoardOne(Long id) {
 		return boardRepository.findById(id).orElse(null);
 	}
