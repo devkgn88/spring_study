@@ -109,9 +109,7 @@ public class BoardController {
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생했습니다.");
 		
 		param.setBoard_no(id);
-		
-		System.out.println(param);
-		
+				
 		Board saved = boardService.updateBoard(param);
 		if(saved != null) {
 			resultMap.put("res_code", "200");
