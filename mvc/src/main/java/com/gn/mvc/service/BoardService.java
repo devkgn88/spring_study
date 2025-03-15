@@ -22,6 +22,22 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	
+	public int deleteBoard(Long id) {
+		int result = 0;
+		try {
+			// 1. id를 기준으로 타킷 조회
+			Board target = boardRepository.findById(id).orElse(null);
+			// 2. 타킷이 존재하는 경우 삭제
+			if(target != null) {
+				boardRepository.deleteById(id);
+			}
+			result = 1;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public Board updateBoard(BoardDto param) {
 		Board result = null;
 		// 1. id를 기준으로 타킷 조회

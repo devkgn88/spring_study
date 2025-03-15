@@ -8,10 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.BoardDto;
@@ -20,7 +21,6 @@ import com.gn.mvc.dto.SearchDto;
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.service.BoardService;
 
-import ch.qos.logback.core.joran.spi.HttpUtil.RequestMethod;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -114,6 +114,25 @@ public class BoardController {
 		if(saved != null) {
 			resultMap.put("res_code", "200");
 			resultMap.put("res_msg", "게시글이 수정되었습니다.");
+		}
+		
+		return resultMap;
+	}
+	
+	@DeleteMapping("/board/{id}")
+	@ResponseBody
+	public Map<String,String> deleteBoardApi(
+			@PathVariable("id") Long id){
+		
+		Map<String,String> resultMap = new HashMap<String,String>();
+		resultMap.put("res_code", "500");
+		resultMap.put("res_msg", "게시글 삭제중 오류가 발생했습니다.");
+		
+		int result = boardService.deleteBoard(id);
+		
+		if(result > 0) {
+			resultMap.put("res_code", "200");
+			resultMap.put("res_msg", "게시글이 삭제되었습니다.");
 		}
 		
 		return resultMap;
