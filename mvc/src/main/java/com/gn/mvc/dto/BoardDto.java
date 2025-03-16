@@ -1,5 +1,9 @@
 package com.gn.mvc.dto;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.entity.Member;
 
@@ -21,6 +25,8 @@ public class BoardDto {
 	private String board_title;
 	private String board_content;
 	private Long board_writer;
+	private List<MultipartFile> files;
+
 	
 	public Board toEntity() {
 		return Board.builder()

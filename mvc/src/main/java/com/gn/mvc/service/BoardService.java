@@ -1,16 +1,22 @@
 package com.gn.mvc.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.gn.mvc.dto.AttachDto;
 import com.gn.mvc.dto.BoardDto;
 import com.gn.mvc.dto.PageDto;
 import com.gn.mvc.dto.SearchDto;
+import com.gn.mvc.entity.Attach;
 import com.gn.mvc.entity.Board;
+import com.gn.mvc.repository.AttachRepository;
 import com.gn.mvc.repository.BoardRepository;
 import com.gn.mvc.specification.BoardSpecification;
 
@@ -21,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 	
 	private final BoardRepository boardRepository;
+	private final AttachRepository attachRepository;
 	
 	public int deleteBoard(Long id) {
 		int result = 0;
@@ -84,11 +91,24 @@ public class BoardService {
 		return boardRepository.findAll(spec,pageable);
 	}
 	
-	public BoardDto createBoard(BoardDto param) {
-		System.out.println("전 : "+param);
-		Board entity = param.toEntity();
-		Board saved = boardRepository.save(entity);
-		System.out.println("후 : "+saved);
-		return new BoardDto().toDto(saved);
+	@Transactional(rollbackFor = Exception.class)
+	public int createBoard(BoardDto param,List<AttachDto> attachList) {
+		int result = 0;
+		try {
+			Board entity = param.toEntity();
+			Board saved = boardRepository.save(entity);
+			Long boardNo = saved.getBoardNo();
+			if(attachList.size() != 0) {
+				for(AttachDto attachDto : attachList) {
+					attachDto.setBoard_no(boardNo);
+					Attach attach = attachDto.toEntity();
+					attachRepository.save(attach);	 
+				}
+			}
+		result = 1;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

@@ -1,6 +1,8 @@
 package com.gn.mvc.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,13 +14,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.gn.mvc.dto.AttachDto;
 import com.gn.mvc.dto.BoardDto;
 import com.gn.mvc.dto.PageDto;
 import com.gn.mvc.dto.SearchDto;
 import com.gn.mvc.entity.Board;
+import com.gn.mvc.service.AttachService;
 import com.gn.mvc.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 	
 	private final BoardService boardService;
+	private final AttachService attachService;
 	
 	private Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
@@ -59,14 +64,22 @@ public class BoardController {
 		resultMap.put("res_code", "404");
 		resultMap.put("res_msg", "게시글 등록중 오류가 발생했습니다.");
 		
-		BoardDto saved = boardService.createBoard(dto);
-		logger.info(saved.toString());
-		if(saved.getBoard_no() != null) {
-			resultMap.put("res_code", "200");
-			resultMap.put("res_msg", "게시글이 등록되었습니다.");
+		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
+		
+		for(MultipartFile mf : dto.getFiles()) {
+			AttachDto attachDto = attachService.uploadFile(mf);
+			if(attachDto != null) attachDtoList.add(attachDto);
 		}
 		
-		
+		if(attachDtoList.size() == dto.getFiles().size()) {
+			// 컴퓨터에 정상 저장된 파일의 수와
+			// 전달받은 파일의 개수가 일치하는 경우
+			int result = boardService.createBoard(dto,attachDtoList);
+			if(result > 0) {
+				resultMap.put("res_code", "200");
+				resultMap.put("res_msg", "게시글이 등록되었습니다.");
+			}		
+		}	
 		return resultMap;
 	}
 	
