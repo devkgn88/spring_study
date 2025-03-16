@@ -42,8 +42,7 @@ layout:decorate="~{/include/layout}">
 									<td>
 										<div th:if="${!#lists.isEmpty(attachList)}"
 											th:each="attach : ${attachList}">
-											<span th:text="${attach.oriName}">파일명</span>
-											<button type="button">다운로드</button>
+											<a th:text="${attach.oriName}">파일명</a>
 										</div>
 									</td>
 								</tr>
