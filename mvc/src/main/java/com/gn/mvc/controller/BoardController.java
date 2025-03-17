@@ -126,14 +126,23 @@ public class BoardController {
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생했습니다.");
 
-		System.out.println(param.getDelete_files());
+		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
 
-		Board saved = boardService.updateBoard(param);
-		if (saved != null) {
-			resultMap.put("res_code", "200");
-			resultMap.put("res_msg", "게시글이 수정되었습니다.");
+		for (MultipartFile mf : param.getFiles()) {
+			AttachDto attachDto = attachService.uploadFile(mf);
+			if (attachDto != null)
+				attachDtoList.add(attachDto);
 		}
 
+		if (attachDtoList.size() == param.getFiles().size()) {
+			// 컴퓨터에 정상 저장된 파일의 수와
+			// 전달받은 파일의 개수가 일치하는 경우
+			Board saved = boardService.updateBoard(param,attachDtoList);
+			if (saved != null) {
+				resultMap.put("res_code", "200");
+				resultMap.put("res_msg", "게시글이 수정되었습니다.");
+			}	
+		}
 		return resultMap;
 	}
 

@@ -47,11 +47,12 @@ public class BoardService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public Board updateBoard(BoardDto param) {
+	public Board updateBoard(BoardDto param, List<AttachDto> attachList) {
 		Board result = null;
 		try {
 			// 1. id를 기준으로 타킷 조회
 			Board target = boardRepository.findById(param.getBoard_no()).orElse(null);
+			
 			// 2. 타깃이 존재하는 경우 업데이트
 			if(target != null) {
 				if(param.getDelete_files() != null && !param.getDelete_files().isEmpty()) {
@@ -63,6 +64,13 @@ public class BoardService {
 								attachRepository.deleteById(attach_no);
 							}
 						}
+					}
+				}
+				if(attachList.size() != 0) {
+					for(AttachDto attachDto : attachList) {
+						attachDto.setBoard_no(param.getBoard_no());
+						Attach attachTarget = attachDto.toEntity();
+						attachRepository.save(attachTarget);
 					}
 				}
 				result = boardRepository.save(param.toEntity());
