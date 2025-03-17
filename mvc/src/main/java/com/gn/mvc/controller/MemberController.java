@@ -42,4 +42,9 @@ public class MemberController {
 		
 		return resultMap;
 	}
+	
+	@GetMapping("/login")
+	public String loginView() {
+		return "member/login";
+	}
 }
