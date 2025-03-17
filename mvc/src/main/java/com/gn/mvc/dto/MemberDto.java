@@ -19,6 +19,7 @@ public class MemberDto {
 	private Long member_no;
 	private String member_id;
 	private String member_pw;
+	private String member_pw_check; 
 	private String member_name;
 	
 	public Member toEntity() {

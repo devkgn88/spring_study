@@ -52,14 +52,28 @@ layout:decorate="~{/include/layout}">
 				if(vali_check == false){
 					alert(vali_text);
 				} else{
+					let obj = {};
 					const payload = new FormData(form);
+					payload.forEach(function(value,key){
+						console.log(key+" : "+value);
+						obj[key] = value;
+					});
+					const jsonData = JSON.stringify(obj);
+
 					fetch("/member",{
 						method : 'post',
+						headers: {
+				              'header': document.querySelector('meta[name="_csrf_header"]').content,
+				              'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+						},			
 						body : payload
 					})
 					.then(response => response.json())
 					.then(data => {
 						alert(data.res_msg);
+						if(data.res_code == 200){
+							location.href="/";
+						}
 					})
 				}
 			}) 

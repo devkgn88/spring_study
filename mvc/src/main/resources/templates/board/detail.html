@@ -61,7 +61,11 @@ layout:decorate="~{/include/layout}">
 			const boardDelete = function(board_no){
 				if(confirm("게시글을 삭제하시겠습니까?")){
 					fetch('/board/'+board_no,{
-						method : 'delete'
+						method : 'delete',
+						headers: {
+				              'header': document.querySelector('meta[name="_csrf_header"]').content,
+				              'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+						},	
 					})
 					.then(response => response.json())
 					.then(data => {
