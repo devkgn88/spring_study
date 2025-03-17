@@ -42,7 +42,8 @@ layout:decorate="~{/include/layout}">
 									<td>
 										<div th:if="${!#lists.isEmpty(attachList)}"
 											th:each="attach : ${attachList}">
-											<a th:text="${attach.oriName}">파일명</a>
+											<a th:onclick="|location.href='@{/download/{id}(id=${attach.attachNo})}'|" 
+											th:text="${attach.oriName}">파일명</a>
 										</div>
 									</td>
 								</tr>

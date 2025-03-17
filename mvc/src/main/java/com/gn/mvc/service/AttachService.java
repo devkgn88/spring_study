@@ -28,6 +28,10 @@ public class AttachService {
 	private final AttachRepository repository;
 	private final BoardRepository boardRepository;
 	
+	public Attach selectAttachOne(Long id) {
+		return repository.findById(id).orElse(null);
+	}
+	
 	public List<Attach> selectAttachList(Long boardNo){
 		Board board = boardRepository.findById(boardNo).orElse(null);
 		Specification<Attach> spec = (root,query,criteriaBuilder) -> null; 
