@@ -28,6 +28,7 @@ public class BoardService {
 	
 	private final BoardRepository boardRepository;
 	private final AttachRepository attachRepository;
+	private final AttachService attachService;
 	
 	public int deleteBoard(Long id) {
 		int result = 0;
@@ -45,13 +46,29 @@ public class BoardService {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public Board updateBoard(BoardDto param) {
 		Board result = null;
-		// 1. id를 기준으로 타킷 조회
-		Board target = boardRepository.findById(param.getBoard_no()).orElse(null);
-		// 2. 타깃이 존재하는 경우 업데이트
-		if(target != null) {
-			result = boardRepository.save(param.toEntity());
+		try {
+			// 1. id를 기준으로 타킷 조회
+			Board target = boardRepository.findById(param.getBoard_no()).orElse(null);
+			// 2. 타깃이 존재하는 경우 업데이트
+			if(target != null) {
+				if(param.getDelete_files() != null && !param.getDelete_files().isEmpty()) {
+					for(Long attach_no : param.getDelete_files()) {
+						// 1. 메모리에서 파일 자체 삭제
+						if(attachService.deleteFile(attach_no) > 0) {
+							Attach targetAttach = attachRepository.findById(attach_no).orElse(null);
+							if(targetAttach != null) {
+								attachRepository.deleteById(attach_no);
+							}
+						}
+					}
+				}
+				result = boardRepository.save(param.toEntity());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}

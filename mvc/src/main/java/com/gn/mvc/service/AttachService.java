@@ -39,6 +39,25 @@ public class AttachService {
 		return repository.findAll(spec);
 	}
 	
+	public int deleteFile(Long attach_no) {
+		int result = 0; 
+		try {
+			Attach attach = repository.findById(attach_no).orElse(null);
+			if(attach != null) {
+				// 파일 경로로 File 객체 생성
+				File file = new File(attach.getAttachPath());
+				// 파일이 존재하면 삭제
+				if(file.exists()) {
+					file.delete();
+				}
+			}
+			result = 1;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public AttachDto uploadFile(MultipartFile file) {
 		AttachDto dto = new AttachDto();
 		try {
