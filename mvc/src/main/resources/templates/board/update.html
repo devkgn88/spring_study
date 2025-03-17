@@ -14,13 +14,40 @@ layout:decorate="~{/include/layout}">
 						<input type="hidden" name="board_no" th:value="${board.boardNo}">
 						<input type="text" name="board_title" th:value="${board.boardTitle}" placeholder="제목을 입력하세요."> <br>
 						<input type="text" name="board_content" th:value="${board.boardContent}" placeholder="내용을 입력하세요."><br>
-						<input type="hidden" name="board_writer" th:value="${board.member.memberNo}">
+						<input type="hidden" name="board_writer" th:value="${board.member.memberNo}"><br>
+						
+						<div th:each="attach : ${attachList}">
+							<input type="hidden" name="delete_files" th:value="${attach.attachNo}" disabled>
+							<span th:text="${attach.oriName}">파일명</span>
+							<button type="button" class="btn_close" onclick="deleteDesign(this);">삭제</button><br>
+						</div>
+	  					<input type="file" name="files" multiple><br>
 						<input type="submit" value="수정"> 
 					</form>
 				</div>
 			</div>
 		</section>		
 		<script>
+			const deleteDesign = function(element){
+				const bumo = element.parentElement;
+				const child1 = bumo.firstElementChild;	// input hidden
+				const child2 = child1.nextElementSibling;	// span
+				
+				if(element.classList.contains('btn_close')){
+					element.classList.add('btn_open');
+					element.classList.remove('btn_close');
+					element.innerText = '유지';
+					child2.style.textDecoration="line-through";
+					child1.disabled = false;
+				} else{
+					element.classList.add('btn_close');
+					element.classList.remove('btn_open');
+					element.innerText = '삭제';
+					child2.style.textDecoration="none";
+					child1.disabled = true;
+				}
+			}
+			
 			const form = document.update_board_form;
 			form.addEventListener('submit',(e)=>{
 				e.preventDefault();

@@ -114,17 +114,19 @@ public class BoardController {
 	public String updateBoardView(@PathVariable("id") Long id, Model model) {
 		Board entity = boardService.selectBoardOne(id);
 		model.addAttribute("board", entity);
+		List<Attach> attachList = attachService.selectAttachList(id);
+		model.addAttribute("attachList",attachList);
 		return "board/update";
 	}
 
 	@PostMapping("/board/{id}/update")
 	@ResponseBody
-	public Map<String, String> updateBoardApi(@PathVariable("id") Long id, BoardDto param) {
+	public Map<String, String> updateBoardApi(BoardDto param) {
 		Map<String, String> resultMap = new HashMap<String, String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생했습니다.");
 
-		param.setBoard_no(id);
+		System.out.println(param.getDelete_files());
 
 		Board saved = boardService.updateBoard(param);
 		if (saved != null) {

@@ -26,6 +26,7 @@ public class BoardDto {
 	private String board_content;
 	private Long board_writer;
 	private List<MultipartFile> files;
+	private List<Long> delete_files;
 
 	
 	public Board toEntity() {
