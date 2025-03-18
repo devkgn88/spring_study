@@ -71,31 +71,31 @@ public class MemberController {
 	private final DataSource dataSource;
 
 	
-	@GetMapping("/logout")
-	public String logout(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) {
-	    System.out.println("Before logout - Session ID: " + request.getSession().getId());
-
-		new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-	    System.out.println("After logout - Session ID: " + request.getSession().getId());
-	    
-	    if(authentication != null) {
-	    	MemberDetails md = (MemberDetails)authentication.getPrincipal();
-	    	String userName = md.getUsername();
-
-			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-			String sql = "DELETE FROM persistent_logins WHERE username = ?";
-			jdbcTemplate.update(sql,userName);
-	    	SecurityContextHolder.getContext().setAuthentication(null);
-	    
-	    }
-	    Cookie rememberMeCookie = new Cookie("remember-me", null);
-	    rememberMeCookie.setMaxAge(0);  // 쿠키 만료
-	    rememberMeCookie.setPath("/");  // 모든 경로에서 삭제 적용
-	    response.addCookie(rememberMeCookie);
-
-		return "redirect:/login";
-	}
+//	@GetMapping("/logout")
+//	public String logout(HttpServletRequest request, HttpServletResponse response,
+//			Authentication authentication) {
+//	    System.out.println("Before logout - Session ID: " + request.getSession().getId());
+//
+//		new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+//	    System.out.println("After logout - Session ID: " + request.getSession().getId());
+//	    
+//	    if(authentication != null) {
+//	    	MemberDetails md = (MemberDetails)authentication.getPrincipal();
+//	    	String userName = md.getUsername();
+//
+//			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+//			String sql = "DELETE FROM persistent_logins WHERE username = ?";
+//			jdbcTemplate.update(sql,userName);
+//	    	SecurityContextHolder.getContext().setAuthentication(null);
+//	    
+//	    }
+//	    Cookie rememberMeCookie = new Cookie("remember-me", null);
+//	    rememberMeCookie.setMaxAge(0);  // 쿠키 만료
+//	    rememberMeCookie.setPath("/");  // 모든 경로에서 삭제 적용
+//	    response.addCookie(rememberMeCookie);
+//
+//		return "redirect:/login";
+//	}
 	
 //	@GetMapping("/logout")
 //	public String logout(HttpServletRequest request, HttpServletResponse response) {

@@ -27,13 +27,17 @@
 							<!-- <a th:href="@{/member/{memberNo}/delete(memberNo=${#authentication.principal.member.memberNo})}">회원 탈퇴</a> -->
 						</li>
 						<li>
-							<a th:href="@{/logout}">로그아웃</a>
+							<!-- <a th:href="@{/logout}">로그아웃</a> -->
+							<form th:action="@{/logout}" method="post">
+								<input type="submit" value="로그아웃">
+							</form>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 		<script>
+		
 		const memberDelete = function(member_no){
 			if(confirm("회원 탈퇴하시겠습니까?")){
 				fetch('/member/'+member_no,{
