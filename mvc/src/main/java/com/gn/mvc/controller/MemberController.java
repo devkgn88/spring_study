@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,8 +47,11 @@ public class MemberController {
 	}
 	
 	@GetMapping("/login")
-	public String loginView() {
-		
+	public String loginView(Model model,
+			@RequestParam(value="error", required=false) String error,
+			@RequestParam(value="errorMsg", required=false) String errorMsg) {
+		model.addAttribute("error", error);
+		model.addAttribute("errorMsg", errorMsg);
 		return "member/login";
 	}
 }
