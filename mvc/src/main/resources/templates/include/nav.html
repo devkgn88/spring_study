@@ -19,7 +19,12 @@
 							<a th:href="@{/board}">게시판</a>
 						</li>
 						<li>
-							<span sec:authentication="principal.Username"></span>님
+							<a th:href="@{/member/{memberNo}/update(memberNo=${#authentication.principal.member.memberNo})}"
+								th:text="|${#authentication.principal.member.memberName} 수정|"></a>
+						</li>
+						<li>
+							<a th:onclick="|javascript:memberDelete('${#authentication.principal.member.memberNo}')|">회원 탈퇴</a>
+							<!-- <a th:href="@{/member/{memberNo}/delete(memberNo=${#authentication.principal.member.memberNo})}">회원 탈퇴</a> -->
 						</li>
 						<li>
 							<a th:href="@{/logout}">로그아웃</a>
@@ -28,5 +33,25 @@
 				</div>
 			</div>
 		</nav>
+		<script>
+		const memberDelete = function(member_no){
+			if(confirm("회원 탈퇴하시겠습니까?")){
+				fetch('/member/'+member_no,{
+					method : 'delete',
+					headers: {
+			              'header': document.querySelector('meta[name="_csrf_header"]').content,
+			              'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+					},	
+				})
+				.then(response => response.json())
+				.then(data => {
+					alert(data.res_msg);
+					if(data.res_code == '200'){
+						location.href="/logout";
+					}
+				})
+			}
+		}
+		</script>
 	</th:block>
 </html>

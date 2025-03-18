@@ -49,8 +49,11 @@ public class WebSecurityConfig {
 					.successHandler(new MyLoginSuccessHandler())
 					.failureHandler(new MyLoginFailureHandler()))
 			.logout(logout -> logout
-					.logoutSuccessUrl("/login")
-					.invalidateHttpSession(true))
+					.logoutUrl("/logout")
+					.clearAuthentication(true)
+					.invalidateHttpSession(true)
+					.deleteCookies("remember-me")
+					.logoutSuccessUrl("/login"))
 			.rememberMe(rememberMe -> rememberMe.rememberMeParameter("remember-me")
 												.tokenValiditySeconds(60*60*24*30)
 												.alwaysRemember(false)
