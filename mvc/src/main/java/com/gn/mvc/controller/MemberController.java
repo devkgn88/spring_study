@@ -3,10 +3,11 @@ package com.gn.mvc.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gn.mvc.dto.MemberDto;
 import com.gn.mvc.service.MemberService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -53,5 +56,11 @@ public class MemberController {
 		model.addAttribute("error", error);
 		model.addAttribute("errorMsg", errorMsg);
 		return "member/login";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+		return "redirect:/login";
 	}
 }
