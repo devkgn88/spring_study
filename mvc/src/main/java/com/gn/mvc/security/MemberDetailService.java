@@ -18,17 +18,13 @@ public class MemberDetailService implements UserDetailsService{
 	private final MemberRepository repository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public MemberDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Member member = repository.findBymemberId(username);
 		if(member == null) {
 			throw new UsernameNotFoundException("존재하지 않는 회원입니다.");
 		}
 		
-		return User.builder()
-				.username(member.getMemberId())
-				.password(member.getMemberPw())
-				.roles("user")
-				.build();
+		return new MemberDetails(member);
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -37,8 +38,9 @@ public class WebSecurityConfig {
 	
 	// 특정 HTTP 요청이 들어왔을 때 보안 관련 사항을 설정
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		http.authorizeHttpRequests(requests -> requests
+	SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService customUserDetailsService) throws Exception{
+		http.userDetailsService(customUserDetailsService)
+			.authorizeHttpRequests(requests -> requests
 							.requestMatchers("/login","/member/create","/member").permitAll()
 							.anyRequest().authenticated())
 			.formLogin(login -> login
