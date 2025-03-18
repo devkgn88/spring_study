@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<th:block th:fragment="navLayout">
 		<link th:href="@{/css/include/nav.css}" rel="stylesheet">
 		<nav>
 			<div id="nav_wrap">
 				<div class="menu">
-					<ul>
-						<li>
-							<a th:href="@{/board/create}">게시글 등록</a>
-						</li>
-						<li>
-							<a th:href="@{/board}">게시판</a>
-						</li>
+					<ul sec:authorize="isAnonymous()">
 						<li>
 							<a th:href="@{/login}">로그인</a>
 						</li>
 						<li>
-							<a th:href="@{/logout}">로그아웃</a>
+							<a th:href="@{/member/create}">회원가입</a>
+						</li>
+					</ul>
+					<ul sec:authorize="isAuthenticated()">
+						<li>
+							<a th:href="@{/board}">게시판</a>
 						</li>
 						<li>
-							<a th:href="@{/member/create}">회원가입</a>
+							<span sec:authentication="principal.Username"></span>님
+						</li>
+						<li>
+							<a th:href="@{/logout}">로그아웃</a>
 						</li>
 					</ul>
 				</div>
