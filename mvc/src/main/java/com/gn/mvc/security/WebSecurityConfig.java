@@ -41,7 +41,7 @@ public class WebSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService customUserDetailsService) throws Exception{
 		http.userDetailsService(customUserDetailsService)
 			.authorizeHttpRequests(requests -> requests
-							.requestMatchers("/login","/member/create","/member").permitAll()
+							.requestMatchers("logout","/login","/member/create","/member").permitAll()
 							.anyRequest().authenticated())
 			.formLogin(login -> login
 					.loginPage("/login")

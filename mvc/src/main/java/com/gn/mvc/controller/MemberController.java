@@ -3,6 +3,10 @@ package com.gn.mvc.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.MemberDto;
 import com.gn.mvc.entity.Member;
+import com.gn.mvc.security.MemberDetails;
 import com.gn.mvc.service.MemberService;
 
 import jakarta.servlet.http.Cookie;
@@ -28,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	
 	private final MemberService memberService;
+
 
 	@GetMapping("/member/create")
 	public String createMemberView() {
@@ -62,13 +68,27 @@ public class MemberController {
 		return "member/login";
 	}
 	
+	private final DataSource dataSource;
+
+	
 	@GetMapping("/logout")
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
+	public String logout(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) {
 	    System.out.println("Before logout - Session ID: " + request.getSession().getId());
 
 		new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 	    System.out.println("After logout - Session ID: " + request.getSession().getId());
+	    
+	    if(authentication != null) {
+	    	MemberDetails md = (MemberDetails)authentication.getPrincipal();
+	    	String userName = md.getUsername();
 
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			String sql = "DELETE FROM persistent_logins WHERE username = ?";
+			jdbcTemplate.update(sql,userName);
+	    	SecurityContextHolder.getContext().setAuthentication(null);
+	    
+	    }
 	    Cookie rememberMeCookie = new Cookie("remember-me", null);
 	    rememberMeCookie.setMaxAge(0);  // 쿠키 만료
 	    rememberMeCookie.setPath("/");  // 모든 경로에서 삭제 적용
@@ -76,6 +96,22 @@ public class MemberController {
 
 		return "redirect:/login";
 	}
+	
+//	@GetMapping("/logout")
+//	public String logout(HttpServletRequest request, HttpServletResponse response) {
+//		HttpSession session= request.getSession(false);
+//		SecurityContextHolder.clearContext();
+//		     session= request.getSession(false);
+//		    if(session != null) {
+//		        session.invalidate();
+//		    }
+//		    for(Cookie cookie : request.getCookies()) {
+//		        cookie.setMaxAge(0);
+//		    }
+//
+//	    return "redirect:/login";
+//	}
+
 	
 	@GetMapping("/member/{id}/update")
 	public String memberUpdateView(@PathVariable("id") Long id, Model model) {
@@ -108,7 +144,6 @@ public class MemberController {
 		resultMap.put("res_msg", "회원 탈퇴중 오류가 발생했습니다.");
 		
 		// 현재 로그인된 사용자 정보 제거
-
 		int result = memberService.deleteMember(id);
 
 		if (result > 0) {
