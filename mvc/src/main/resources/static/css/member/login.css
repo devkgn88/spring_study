@@ -16,7 +16,7 @@ section {
 	margin: 0 auto;
 	text-align: center;
 	}
-#section_wrap .login_form input {
+#section_wrap .login_form input:not([type='checkbox']) {
 	width: 300px;
 	margin: 3px;
 	}

@@ -1,5 +1,8 @@
 package com.gn.mvc.security;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +14,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import lombok.RequiredArgsConstructor;
 
 //스프링에서 읽는 환경설정 파일임을 의미
 @Configuration
 //스프링 시큐리티를 활성화하겠다는 어노테이션
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
 	
@@ -40,9 +48,23 @@ public class WebSecurityConfig {
 					.failureHandler(new MyLoginFailureHandler()))
 			.logout(logout -> logout
 					.logoutSuccessUrl("/login")
-					.invalidateHttpSession(true));
+					.invalidateHttpSession(true))
+			.rememberMe(rememberMe -> rememberMe.rememberMeParameter("remember-me")
+												.tokenValiditySeconds(60*60*24*30)
+												.alwaysRemember(false)
+												.tokenRepository(tokenRepository()));
 		return http.build();
 	} 
+	
+	
+	private final DataSource dataSource;
+	
+	@Bean
+	PersistentTokenRepository tokenRepository() {
+		JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+		jdbcTokenRepository.setDataSource(dataSource);
+		return jdbcTokenRepository;
+	}
 	
 	// 비밀번호 암호화에 사용될 빈 등록
 	@Bean
