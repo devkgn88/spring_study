@@ -31,16 +31,18 @@ public class WebSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		http.authorizeHttpRequests(requests -> requests
-							.requestMatchers("/login","/member/create","/member","/").permitAll()
+							.requestMatchers("/login","/member/create","/member").permitAll()
 							.anyRequest().authenticated())
 			.formLogin(login -> login
 					.loginPage("/login")
-					.defaultSuccessUrl("/"))
+					//.defaultSuccessUrl("/")
+					.successHandler(new MyLoginSuccessHandler())
+					.failureHandler(new MyLoginFailureHandler()))
 			.logout(logout -> logout
 					.logoutSuccessUrl("/login")
 					.invalidateHttpSession(true));
 		return http.build();
-	}
+	} 
 	
 	// 비밀번호 암호화에 사용될 빈 등록
 	@Bean
