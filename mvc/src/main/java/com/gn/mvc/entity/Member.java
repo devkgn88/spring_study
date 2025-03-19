@@ -38,4 +38,7 @@ public class Member {
 	
 	@OneToMany(mappedBy="member")
 	private List<Board> boards;
+	
+	@Column(nullable=false)
+	private String memberRole;
 }
