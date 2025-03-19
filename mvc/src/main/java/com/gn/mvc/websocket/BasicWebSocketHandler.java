@@ -1,5 +1,8 @@
 package com.gn.mvc.websocket;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -7,11 +10,13 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 public class BasicWebSocketHandler extends TextWebSocketHandler{
 
+	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String payload = message.getPayload();
-		System.out.println("서버가 받은 메시지 : "+payload);
-		session.sendMessage(new TextMessage("서버가 보낸 메시지 : "+session.getId()));
+		System.out.println(payload);
+		// 내가 나한테 보내기
+		session.sendMessage(new TextMessage("서버 -> 클라이언트 : "+session.getId()));		
 	}
 	
 	@Override
@@ -24,7 +29,4 @@ public class BasicWebSocketHandler extends TextWebSocketHandler{
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		System.out.println("WebSocket 연결 종료 : "+session.getId());
 	}
-	
-	
-
 }
