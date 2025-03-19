@@ -20,6 +20,7 @@ public class MemberDto {
 	private String member_id;
 	private String member_pw;
 	private String member_name;
+	private String member_role;
 	
 	public Member toEntity() {
 		return Member.builder()
@@ -27,6 +28,7 @@ public class MemberDto {
 				.memberId(member_id)
 				.memberPw(member_pw)
 				.memberName(member_name)
+				.memberRole(member_role)
 				.build();
 	}
 	

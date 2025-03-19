@@ -26,7 +26,7 @@ public class MemberDetails implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// 기본권한 user 부여 
-	    return List.of(new SimpleGrantedAuthority("user"));
+	    return List.of(new SimpleGrantedAuthority(member.getMemberRole()));
 	}
 
 	// 사용자 이름(로그인 ID)반환
