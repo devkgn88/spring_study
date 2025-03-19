@@ -1,8 +1,5 @@
 package com.gn.mvc.websocket;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;

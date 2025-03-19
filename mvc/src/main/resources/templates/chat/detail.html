@@ -1,10 +1,48 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorate="~{/include/layout}">
+	<th:block layout:fragment="content">	
+	    <h1>1:1 채팅</h1>
+	    <input type="hidden" id="roomNo" th:value="${chatRoom.roomNo}">
+	    <label for="senderNo">보내는 사람 : </label>
+	    <span th:text="${#authentication.principal.member.memberName}"></span>
+	    <input type="hidden" id="senderNo" th:value="${#authentication.principal.member.memberNo}">
+	    <br>
+	    <label for="receiverNo">받는 사람 : </label>
+	    <th:block th:if="${chatRoom.toMember.memberName == #authentication.principal.member.memberName}">
+	    	<span th:text="${chatRoom.fromMember.memberName}"></span>
+	    	<input type="hidden" id="receiverNo" th:value="${chatRoom.fromMember.memberNo}">
+		</th:block>
+		<th:block th:if="${chatRoom.fromMember.memberName == #authentication.principal.member.memberName}">
+			<span th:text="${chatRoom.fromMember.memberName}"></span>
+	    	<input type="hidden" id="receiverNo" th:value="${chatRoom.toMember.memberNo}">
+		</th:block>
+		<br>
+	    <textarea id="messageContent" placeholder="메시지 입력"></textarea>
+	    <br>
+	    <button onclick="sendMessage();">전송</button>
+	    <div id="chatBox">
+	    
+	    </div>
+	    <script>
+	   		let userId = document.getElementById("senderNo").value;
+	   		let socket = new WebSocket("ws://localhost:8080/ws/chat?userId="+userId);
+	   		
+	   		socket.onmessage = function(event){
+	               document.getElementById("chatBox").innerHTML += "<p>" + event.data + "</p>";
+	   		};
+	   		
+	   		const sendMessage = function(){
+	            let receiverId = document.getElementById("receiverNo").value;
+	            let messageContent = document.getElementById("messageContent").value;
+	            let roomNo = document.getElementById("roomNo").value;
+				
+	            socket.send(JSON.stringify({sender_no: userId, receiver_no: receiverId, message_content: messageContent, room_no : roomNo}));
+	   		}
+	    		
+	    	
+	    </script>
 
-</body>
+    </th:block>
 </html>
