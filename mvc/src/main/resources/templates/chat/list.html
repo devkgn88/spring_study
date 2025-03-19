@@ -53,6 +53,7 @@ layout:decorate="~{/include/layout}">
 			</div>
 		</div>
 	</section>	
+	
 	<div class="center">
 		<div class="pagination">
 			<a th:if="${pageDto.prev}" th:href="@{/chat/list(nowPage=${pageDto.pageBarStart-1})}">
@@ -73,7 +74,7 @@ layout:decorate="~{/include/layout}">
 	<script>
 		$('.board_list tbody tr').on('click',function(){
 			const roomNo = $(this).data('room-no');
-			location.href="/chat/detail/"+roomNo;
+			location.href="/chat/"+roomNo+"/detail";
 		});
 	</script>
     </th:block>
