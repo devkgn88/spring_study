@@ -15,7 +15,7 @@ layout:decorate="~{/include/layout}">
 	    	<input type="hidden" id="receiverNo" th:value="${chatRoom.fromMember.memberNo}">
 		</th:block>
 		<th:block th:if="${chatRoom.fromMember.memberName == #authentication.principal.member.memberName}">
-			<span th:text="${chatRoom.fromMember.memberName}"></span>
+			<span th:text="${chatRoom.toMember.memberName}"></span>
 	    	<input type="hidden" id="receiverNo" th:value="${chatRoom.toMember.memberNo}">
 		</th:block>
 		<br>
