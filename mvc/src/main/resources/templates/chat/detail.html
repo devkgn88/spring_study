@@ -28,8 +28,8 @@ layout:decorate="~{/include/layout}">
 	    <script>
 	   		let senderNo = document.getElementById("senderNo").value;
             let roomNo = document.getElementById("roomNo").value;
-//	   		let socket = new WebSocket("ws://localhost:8080/ws/chat?userNo="+senderNo+"&roomNo="+roomNo);
-		   	let socket = new WebSocket("ws://localhost:8080/ws/chat?userNo="+senderNo);
+	   		let socket = new WebSocket("ws://localhost:8080/ws/chat?userNo="+senderNo+"&roomNo="+roomNo);
+		   	// let socket = new WebSocket("ws://localhost:8080/ws/chat?userNo="+senderNo);
    		
 	   		socket.onmessage = function(event){
 	               document.getElementById("chatBox").innerHTML += "<p>" + event.data + "</p>";
