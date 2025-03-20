@@ -26,19 +26,19 @@ layout:decorate="~{/include/layout}">
 	    
 	    </div>
 	    <script>
-	   		let userId = document.getElementById("senderNo").value;
-	   		let socket = new WebSocket("ws://localhost:8080/ws/chat?userId="+userId);
+	   		let senderNo = document.getElementById("senderNo").value;
+            let roomNo = document.getElementById("roomNo").value;
+	   		let socket = new WebSocket("ws://localhost:8080/ws/chat?userNo="+senderNo+"&roomNo="+roomNo);
 	   		
 	   		socket.onmessage = function(event){
 	               document.getElementById("chatBox").innerHTML += "<p>" + event.data + "</p>";
 	   		};
 	   		
 	   		const sendMessage = function(){
-	            let receiverId = document.getElementById("receiverNo").value;
+	            let receiverNo = document.getElementById("receiverNo").value;
 	            let messageContent = document.getElementById("messageContent").value;
-	            let roomNo = document.getElementById("roomNo").value;
 				
-	            socket.send(JSON.stringify({sender_no: userId, receiver_no: receiverId, message_content: messageContent, room_no : roomNo}));
+	            socket.send(JSON.stringify({sender_no: senderNo, receiver_no: receiverNo, message_content: messageContent, room_no : roomNo}));
 	   		}
 	    		
 	    	
