@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gn.mvc.dto.ChatMessageDto;
+import com.gn.mvc.entity.ChatMessage;
+import com.gn.mvc.entity.ChatRoom;
+import com.gn.mvc.entity.Member;
+import com.gn.mvc.repository.ChatMessageRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
@@ -21,7 +27,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private static final Map<Long, WebSocketSession> userSessions = new ConcurrentHashMap<Long,WebSocketSession>();
     private static final Map<Long, Long> userRooms = new ConcurrentHashMap<Long,Long>();
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    private final ChatMessageRepository chatMessageRepository;
+    
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
     	String userNo = getQueryParam(session,"userNo");
@@ -50,26 +57,36 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
-    	ChatMessageDto chatMessage = objectMapper.readValue(message.getPayload(), ChatMessageDto.class);
+    	ChatMessageDto dto = objectMapper.readValue(message.getPayload(), ChatMessageDto.class);
     	
         // 데이터베이스에 채팅 메시지 등록
+    	if(userSessions.containsKey(dto.getSender_no())) {
+    		ChatMessage entity = ChatMessage.builder()
+    							.sendMember(Member.builder().memberNo(dto.getSender_no()).build())
+    							.chatRoom(ChatRoom.builder().roomNo(dto.getRoom_no()).build())
+    							.messageContent(dto.getMessage_content())
+    							.build();
+    		chatMessageRepository.save(entity);				
+    	}
     	
     	// 받는 사람한테 메시지 출력
-        WebSocketSession receiverSession = userSessions.get(chatMessage.getReceiver_no());
-        Long receiverRoom = userRooms.get(chatMessage.getReceiver_no());
+        WebSocketSession receiverSession = userSessions.get(dto.getReceiver_no());
+        Long receiverRoom = userRooms.get(dto.getReceiver_no());
         
         if (receiverSession != null && receiverSession.isOpen()
-        		&& receiverRoom == chatMessage.getRoom_no()) {
-            receiverSession.sendMessage(new TextMessage(chatMessage.getMessage_content()));
+        		&& receiverRoom == dto.getRoom_no()) {
+        	// 단순 메시지를 보내는 것 X
+        	// 모든 정보가 포함된 데이터 JSON 형태로 보내기
+            receiverSession.sendMessage(new TextMessage(message.getPayload()));
         }
         
         // 보내는 사람한테 메시지 출력
-        WebSocketSession senderSession = userSessions.get(chatMessage.getSender_no());
-        Long senderRoom = userRooms.get(chatMessage.getReceiver_no());
+        WebSocketSession senderSession = userSessions.get(dto.getSender_no());
+        Long senderRoom = userRooms.get(dto.getSender_no());
         
         if(senderSession != null && senderSession.isOpen()
-        		&& senderRoom == chatMessage.getRoom_no()) {
-        	senderSession.sendMessage(new TextMessage(chatMessage.getMessage_content()));
+        		&& senderRoom == dto.getRoom_no()) {
+        	senderSession.sendMessage(new TextMessage(message.getPayload()));
         }
     }
 

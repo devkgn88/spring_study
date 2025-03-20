@@ -3,28 +3,66 @@
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
 layout:decorate="~{/include/layout}">
 	<th:block layout:fragment="content">	
+	<style>
+        .message-box {
+            display: flex;
+            margin: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 60%;
+            word-break:break-word;
+        }
+        .message-left {
+            align-self : flex-start;
+            background-color: lightgray;
+        }
+        .message-right {
+            align-self : flex-end;
+            background-color: lightblue;
+        }
+        #chatBox{
+        	width:400px; height:500px;
+        	border: 1px solid #ccc;
+        	padding:10px;
+        	overflow-y:auto; 
+        	display:flex;
+        	flex-direction:column;
+        	background-color:#f9f9f9;
+        }
+        .container{
+        	display: flex;
+		    flex-direction: column;
+		    align-items: center; /* 내부 요소 가운데 정렬 */
+		    background: white;
+		    padding: 20px;
+        }
+    </style>
+    <div class="container">
 	    <h1>1:1 채팅</h1>
 	    <input type="hidden" id="roomNo" th:value="${chatRoom.roomNo}">
-	    <label for="senderNo">보내는 사람 : </label>
-	    <span th:text="${#authentication.principal.member.memberName}"></span>
+	    <span th:text="|보내는 사람 : ${#authentication.principal.member.memberName}|"></span>
 	    <input type="hidden" id="senderNo" th:value="${#authentication.principal.member.memberNo}">
 	    <br>
-	    <label for="receiverNo">받는 사람 : </label>
 	    <th:block th:if="${chatRoom.toMember.memberName == #authentication.principal.member.memberName}">
-	    	<span th:text="${chatRoom.fromMember.memberName}"></span>
+	    	<span th:text="|받는 사람 : ${chatRoom.fromMember.memberName}|"></span>
 	    	<input type="hidden" id="receiverNo" th:value="${chatRoom.fromMember.memberNo}">
 		</th:block>
 		<th:block th:if="${chatRoom.fromMember.memberName == #authentication.principal.member.memberName}">
-			<span th:text="${chatRoom.toMember.memberName}"></span>
+			<span th:text="|받는 사람 : ${chatRoom.toMember.memberName}|"></span>
 	    	<input type="hidden" id="receiverNo" th:value="${chatRoom.toMember.memberNo}">
 		</th:block>
 		<br>
 	    <textarea id="messageContent" placeholder="메시지 입력"></textarea>
-	    <br>
 	    <button onclick="sendMessage();">전송</button>
 	    <div id="chatBox">
-	    
+		 	<div th:if="${!#lists.isEmpty(msgList)}" 
+	    		th:each="chatMessage : ${msgList}"
+	    		th:text="${chatMessage.messageContent}" class="message-box"
+	    		th:classappend="${chatMessage.sendMember.memberNo == #authentication.principal.member.memberNo} ? 'message-right' : 'message-left'">
+	    			메시지
+   			</div>
 	    </div>
+    </div>
 	    <script>
 	   		let senderNo = document.getElementById("senderNo").value;
             let roomNo = document.getElementById("roomNo").value;
@@ -32,14 +70,39 @@ layout:decorate="~{/include/layout}">
 		   	// let socket = new WebSocket("ws://localhost:8080/ws/chat?userNo="+senderNo);
    		
 	   		socket.onmessage = function(event){
-	               document.getElementById("chatBox").innerHTML += "<p>" + event.data + "</p>";
+	               // document.getElementById("chatBox").innerHTML += "<p>" + event.data + "</p>";
+	               let messageData = JSON.parse(event.data);
+	               displayMessage(messageData);
 	   		};
+	   		
+	   		// 메시지를 출력하는 방식을 좀 더 상세하게 규정
+	   		const displayMessage = function(chatMessage){
+	   			let chatBox = document.getElementById("chatBox");
+	            let messageDiv = document.createElement("div");
+
+	            messageDiv.classList.add("message-box");
+	            
+ 	            if (chatMessage.sender_no === senderNo) {
+	                messageDiv.classList.add("message-right");
+	            } else {
+	                messageDiv.classList.add("message-left");
+	            }
+	                messageDiv.innerHTML = `<div>${chatMessage.message_content}</div>`;
+
+	            chatBox.appendChild(messageDiv);
+	            scrollToBottom();
+	   		}
+	   		
+	   		const scrollToBottom = function() {
+	   		    let chatBox = document.getElementById("chatBox");
+	   		    chatBox.scrollTop = chatBox.scrollHeight;
+	   		}
 	   		
 	   		const sendMessage = function(){
 	            let receiverNo = document.getElementById("receiverNo").value;
 	            let messageContent = document.getElementById("messageContent").value;
-				
 	            socket.send(JSON.stringify({sender_no: senderNo, receiver_no: receiverNo, message_content: messageContent, room_no : roomNo}));
+	   			document.getElementById("messageContent").value="";
 	   		}
 	    		
 	    	
