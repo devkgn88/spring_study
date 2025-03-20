@@ -122,14 +122,19 @@ public class MemberController {
 	
 	@PostMapping("/member/{id}/update")
 	@ResponseBody
-	public Map<String,String> memberUpdateApi(MemberDto param){
+	public Map<String,String> memberUpdateApi(MemberDto param, HttpServletResponse response){
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "회원 수정중 오류가 발생하였습니다.");
 		
 		int result = memberService.updateMember(param);
 		if(result > 0) {
-			resultMap.put("res_code", "200");
+			Cookie rememberMeCookie = new Cookie("remember-me", null);
+		    rememberMeCookie.setMaxAge(0);  // 쿠키 만료
+		    rememberMeCookie.setPath("/");  // 모든 경로에서 삭제 적용
+		    response.addCookie(rememberMeCookie);
+			
+		    resultMap.put("res_code", "200");
 			resultMap.put("res_msg", "회원이 수정되었습니다.");
 		}
 		

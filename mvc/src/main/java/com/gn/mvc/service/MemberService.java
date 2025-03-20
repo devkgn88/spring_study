@@ -61,6 +61,7 @@ public class MemberService {
 				JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 				String sql = "DELETE FROM persistent_logins WHERE username = ?";
 				jdbcTemplate.update(sql,param.getMember_id());
+				
 				// 3. 변경된 회원 정보 Spring Security에 즉시 반영
 				UserDetails updatedUserDetails = userDetailsService.loadUserByUsername(param.getMember_id());
 				Authentication newAuth = new UsernamePasswordAuthenticationToken(
