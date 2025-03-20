@@ -34,6 +34,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     	ChatMessageDto chatMessage = objectMapper.readValue(message.getPayload(), ChatMessageDto.class);
     	
     	// 채팅방 ID 저장(사용자가 현재 접속한 방 정보 업데이트)
+    	userRooms.put(chatMessage.getSender_no(), chatMessage.getRoom_no());
     	
         // 데이터베이스에 채팅 메시지 등록
         WebSocketSession receiverSession = userSessions.get(chatMessage.getReceiver_no());
