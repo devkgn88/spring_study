@@ -5,30 +5,82 @@
 <title>홈화면</title>
 </head>
 <body>
+	<h1>할 일 목록</h1>
 	<div>
 		<form th:action="@{/}" method="get">
 			<label for="search_text">내용 : </label>
-			<input type="text" name="search_text" id="search_text">
-			<input type="submit" name="검색">
+			<input type="text" name="search_text" id="search_text"
+			th:value="${searchDto.search_text}">
+			<button type="submit">검색</button>
 		</form>
-	</div>
+	</div><br>
 	<div>
-		<table>
+		<table border="1">
 			<thead>
 				<tr>
 					<th>완료</th>
 					<th>번호</th>
 					<th>내용</th>
-					<th>날짜</th>
 					<th>삭제</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:if="${#lists.isEmpty(resultList)}">
-					<td colspan="5"></td>
+					<td colspan="5">조회된 결과가 없습니다</td>
+				</tr>
+				<tr th:if="${!#lists.isEmpty(resultList)}"
+					th:each=" todo, todoStatus : ${resultList}">
+					<td>
+						<input type="checkbox"
+							th:checked="${todo.flag == 'Y'}">
+					</td>
+					<td th:text="${(pageDto.nowPage-1)*(pageDto.numPerPage)+todoStatus.count}">번호</td>
+					<td th:text="${todo.content}">내용</td>
+					<td>
+						<input type="button" value="삭제" onclick="deleteTodo();">
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	<div>
+		<a th:if="${pageDto.prev}"
+			th:href="@{/(nowPage=${pageDto.pageBarStart-1},search_text=${searchDto.search_text})}">
+			&laquo;&nbsp;
+		</a>
+		<th:block th:each="num : ${#numbers.sequence(pageDto.pageBarStart,pageDto.pageBarEnd)}">
+			<a th:text="${num}"
+				th:href="@{/(nowPage=${num},search_text=${searchDto.search_text})}">
+				번호
+			</a>&nbsp;
+		</th:block>
+		<a th:if="${pageDto.next}"
+			th:href="@{/(nowPage=${pageDto.pageBarEnd+1},search_text=${searchDto.search_text})}">
+			&raquo;&nbsp;
+		</a>
+	</div>
+	<h1>할 일 추가</h1>
+	<form name="addTodoFrm">
+		<input type="text" name="content" id="content" placeholder="할일을 입력하세요.">
+		<input type="button" value="추가하기" onclick="addTodo();">
+	</form>
+	<script>
+		const addTodo = function(){
+			let content = document.getElementById("content").value;
+			let date = document.getElementById("date").value;
+			let form = document.addTodoFrm;
+			fetch("/create",{
+				method:'post',
+				body: new FormData(form)
+			})
+			.then(response => response.json())
+			.then(data => {
+				alert(data.res_msg);
+				if(data.res_code == 200){
+					location.href="/";
+				}
+			})
+		}
+	</script>
 </body>
 </html>

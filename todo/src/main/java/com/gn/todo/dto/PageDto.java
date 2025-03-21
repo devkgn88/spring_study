@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PageDto {
 
-	private int numPerPage = 3;// 한 페이지에 데이터 개수
+	private int numPerPage = 5;// 한 페이지에 데이터 개수
 	private int nowPage;	// 현재 페이지
 	
 	// 페이징바
-	private int pageBarSize = 2;
+	private int pageBarSize = 5;
 	private int pageBarStart;
 	private int pageBarEnd;
 	
