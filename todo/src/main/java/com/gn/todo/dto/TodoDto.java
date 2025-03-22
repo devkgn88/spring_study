@@ -13,9 +13,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class TodoDto {
-	
-	private String date;
+public class TodoDto {	
 	private String content;
 	private char flag = 'N';
 }

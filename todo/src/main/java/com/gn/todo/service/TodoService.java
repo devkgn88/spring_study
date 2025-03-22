@@ -29,12 +29,9 @@ public class TodoService {
 	public int createTodo(TodoDto dto) {
 		int result = 0;
 		try {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate date = LocalDate.parse(dto.getDate(),formatter);
 		
 		Todo entity = Todo.builder()
 						.content(dto.getContent())
-						.date(date)
 						.flag(dto.getFlag())
 						.build();
 		todoRepository.save(entity);
@@ -48,7 +45,7 @@ public class TodoService {
 	public Page<Todo> selectTodoAll(SearchDto searchDto, PageDto pageDto){
 		Specification<Todo> spec = (root, query, criteriaBuilder) -> null;
 		Pageable pageable 
-			= PageRequest.of(pageDto.getNowPage()-1, pageDto.getNumPerPage(), Sort.by("date").ascending());
+			= PageRequest.of(pageDto.getNowPage()-1, pageDto.getNumPerPage());
 		
 		if(searchDto.getSearch_text() != null) {
 			spec = spec.and(TodoSpecification.contentContains(searchDto.getSearch_text()));

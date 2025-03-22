@@ -66,8 +66,6 @@
 	</form>
 	<script>
 		const addTodo = function(){
-			let content = document.getElementById("content").value;
-			let date = document.getElementById("date").value;
 			let form = document.addTodoFrm;
 			fetch("/create",{
 				method:'post',

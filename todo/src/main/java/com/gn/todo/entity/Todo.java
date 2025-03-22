@@ -30,8 +30,5 @@ public class Todo {
 	
 	@Column
 	private char flag;
-	
-	@Column
-	private LocalDate date;
 
 }
