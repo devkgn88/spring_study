@@ -27,7 +27,7 @@ jobs:
    # Gradle build 실행
    - name: Build with Gradle
      run: |
-      cd todo
+      cd /home/ubuntu/app/todo
       chmod +x ./gradlew
       ./gradlew clean build -x test
    # 빌드된 jar파일 확인   
