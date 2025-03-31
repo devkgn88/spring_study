@@ -1,0 +1,37 @@
+name: Deploy to EC2 using Docker
+on: 
+ push:
+  branches:
+   - master
+  paths:
+   - 'todo/**'
+jobs:
+ deploy:
+  runs-on: ubuntu-latest
+
+  steps:
+   # 저장소 클론
+   - name: Checkout Repository
+     uses: actions/checkout@v3
+   # EC2 서버에 SSH로 접속하여 배포
+   - name: Deploy to EC2
+     uses: appleboy/sshe-action@v0.1.10
+     with:
+      host: ${{ secrets.EC2_HOST }}
+      username: ubuntu
+      key: ${{ secrets.EC2_SSH_KEY }}
+      script: |
+       # 작업 디렉토리 이동
+       cd /home/ubuntu/app
+       # 최신 코드 가져오기
+       git pull origin master
+       # todo 프로젝트 디렉토리로 이동
+       cd todo
+       # GitHub Secrets에 저장된 application-secret.properties 파일 생성
+       echo "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
+       # Docker 컨테이너 중지 및 삭제
+       docker stop my-app || true
+       docker rm my-app || true
+       # Docker 이미지 빌드 및 실행
+       docker build -t my-app
+       docker run -d --name my-app -p 8080:8080 my-app
