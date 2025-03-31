@@ -23,7 +23,8 @@ jobs:
    - name: Copy application-secret.properties
      run: |
       # 최신 코드 가져오기
-      # git pull origin master
+      cd /home/ubuntu/app
+      git pull origin master
       cd todo
       echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
    # Gradle build 실행
