@@ -44,10 +44,8 @@ jobs:
       script: |
        # 작업 디렉토리 이동
        cd /home/ubuntu/app
-       git pull origin master
        # todo 프로젝트 디렉토리로 이동
        cd todo
-       echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
        # Docker 컨테이너 중지 및 삭제
        sudo docker stop my-app || true
        sudo docker rm my-app || true
