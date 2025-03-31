@@ -23,18 +23,16 @@ jobs:
    - name: Copy application-secret.properties
      run: |
       # 최신 코드 가져오기
-      git pull origin master
+      # git pull origin master
       cd todo
       echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
-   - name: Ensure Build Directory Exists
-     run: |
-      mkdir -p build/libs
    # Gradle build 실행
    - name: Build with Gradle
      run: |
       cd todo
       chmod +x ./gradlew
       ./gradlew clean build -x test
+   # 빌드된 jar파일 확인   
    - name: Check Jar file
      run: |
       ls -lh todo/build/libs/
@@ -50,9 +48,5 @@ jobs:
        cd /home/ubuntu/app
        # todo 프로젝트 디렉토리로 이동
        cd todo
-       # Docker 컨테이너 중지 및 삭제
-       sudo docker stop my-app || true
-       sudo docker rm my-app || true
-       # Docker 이미지 빌드 및 실행
-       sudo docker build -t my-app .
-       sudo docker run -d --name my-app -p 8080:8080 my-app
+       scp todo/build/libs/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app/todo.jar
+       nohup java -jar /home/ubuntu/app/todo.jar > /home/ubuntu/app/app.log 2>&1 &
