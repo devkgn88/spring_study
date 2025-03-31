@@ -34,18 +34,19 @@ jobs:
    - name: Check Jar file
      run: |
       ls -lh todo/build/libs/
-   # EC2 서버에 SSH로 접속하여 배포
-   - name: Deploy to EC2
-     uses: appleboy/ssh-action@master
-     with:
-      host: ${{ secrets.EC2_HOST }}
-      username: ubuntu
-      key: ${{ secrets.EC2_SSH_KEY }}
-      script: |
-       mkdir -p ~/.ssh
-       ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-       cd /home/ubuntu/app
-       # todo 프로젝트 디렉토리로 이동
-       cd todo
-       scp build/libs/todo-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app/todo.jar
-       nohup java -jar /home/ubuntu/app/todo.jar > /home/ubuntu/app/app.log 2>&1 &
+   # ssh key 파일 생성
+   - name: Create SSH Key
+     run: |
+      echo "${{ secrets.EC2_SSH_KEY }}" > ~/private-key.pem
+      chmod 600 ~/private-key.pem
+   - name: Create SSH directory
+     run: |
+      mkdir -p ~/.ssh
+   - name: Add known host
+     run: |
+      ssh-keysan ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+   - name: Copy files to remote server
+     run: |
+      cd /home/ubuntu/app/todo
+      scp build/libs/todo-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app/todo.jar
+      nohup java -jar /home/ubuntu/app/todo.jar > /home/ubuntu/app/app.log 2>&1 &
