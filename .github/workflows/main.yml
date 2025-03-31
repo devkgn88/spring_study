@@ -33,5 +33,5 @@ jobs:
        docker stop my-app || true
        docker rm my-app || true
        # Docker 이미지 빌드 및 실행
-       docker build -t my-app
+       docker build -t my-app .
        docker run -d --name my-app -p 8080:8080 my-app
