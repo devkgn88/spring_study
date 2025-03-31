@@ -26,12 +26,18 @@ jobs:
       git pull origin master
       cd todo
       echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
+   - name: Ensure Build Directory Exists
+     run: |
+      mkdir -p todo/build/libs
    # Gradle build 실행
    - name: Build with Gradle
      run: |
       cd todo
       chmod +x ./gradlew
       ./gradlew clean build -x test
+   - name: Check Jar file
+     run: |
+      ls -lh todo/build/libs/
    # EC2 서버에 SSH로 접속하여 배포
    - name: Deploy to EC2
      uses: appleboy/ssh-action@master
