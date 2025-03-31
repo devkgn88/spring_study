@@ -26,6 +26,8 @@ jobs:
       echo "ls -a . & pwd"
       pwd
       ls -a .
+      cd ./todo/src/main/resources
+      ls -a .
    # Gradle build 실행
    - name: Build with Gradle
      run: |
