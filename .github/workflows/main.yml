@@ -23,7 +23,7 @@ jobs:
    - name: Copy application-secret.properties
      run: |
       cd todo
-      echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
+      sudo echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
    # Gradle build 실행
    - name: Build with Gradle
      run: |
