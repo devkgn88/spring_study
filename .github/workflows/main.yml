@@ -28,6 +28,9 @@ jobs:
       ls -a .
       cd ./todo/src/main/resources
       ls -a .
+      touch ./application-secret.properties
+      pwd
+      ls -a .
    # Gradle build 실행
    - name: Build with Gradle
      run: |
