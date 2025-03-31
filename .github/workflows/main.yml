@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ 저장소 클론
+      # 저장소 클론
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2️⃣ EC2 서버에 SSH 접속 후 모든 작업 수행
+      # EC2 서버에 SSH 접속 후 모든 작업 수행
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
