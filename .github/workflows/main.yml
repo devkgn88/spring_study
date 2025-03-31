@@ -45,5 +45,5 @@ jobs:
        cd /home/ubuntu/app
        # todo 프로젝트 디렉토리로 이동
        cd todo
-       scp todo/build/libs/todo-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app/todo.jar
+       scp build/libs/todo-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app/todo.jar
        nohup java -jar /home/ubuntu/app/todo.jar > /home/ubuntu/app/app.log 2>&1 &
