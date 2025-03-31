@@ -28,7 +28,7 @@ jobs:
        # todo 프로젝트 디렉토리로 이동
        cd todo
        # GitHub Secrets에 저장된 application-secret.properties 파일 생성
-       echo "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
+       echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
        # Docker 컨테이너 중지 및 삭제
        docker stop my-app || true
        docker rm my-app || true
