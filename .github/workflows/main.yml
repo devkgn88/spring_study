@@ -48,5 +48,9 @@ jobs:
        cd /home/ubuntu/app
        # todo 프로젝트 디렉토리로 이동
        cd todo
-       scp todo/build/libs/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app/todo.jar
-       nohup java -jar /home/ubuntu/app/todo.jar > /home/ubuntu/app/app.log 2>&1 &
+       # Docker 컨테이너 중지 및 삭제
+       sudo docker stop my-app || true
+       sudo docker rm my-app || true
+       # Docker 이미지 빌드 및 실행
+       sudo docker build -t my-app .
+       sudo docker run -d --name my-app -p 8080:8080 my-app
