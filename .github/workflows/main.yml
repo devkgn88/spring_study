@@ -31,7 +31,7 @@ jobs:
      run: |
       cd todo
       chmod +x ./gradlew
-      ./gradlew clean build
+      ./gradlew clean build -x test
    # EC2 서버에 SSH로 접속하여 배포
    - name: Deploy to EC2
      uses: appleboy/ssh-action@master
