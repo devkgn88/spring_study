@@ -23,10 +23,9 @@ jobs:
    - name: Copy application-secret.properties
      if: contains(github.ref, 'master')
      run: |
-      mkdir -p .todo/src/main/resources
-      cd .todo/src/main/resources
-      touch ./application-secret.properties
-      echo "${{ secrets.APP_SECRET_PROPERTIES }}" >> ./application-secret.properties
+      echo "ls -a . & pwd"
+      pwd
+      ls -a .
    # Gradle build 실행
    - name: Build with Gradle
      run: |
