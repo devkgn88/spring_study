@@ -21,24 +21,15 @@ jobs:
       java-version: '17'
    # Secrets 복사
    - name: Copy application-secret.properties
-     if: contains(github.ref, 'master')
      run: |
-      echo "ls -a . & pwd"
-      pwd
-      ls -a .
-      cd ./todo/src/main/resources
-      ls -a .
-      touch ./application-secret.properties
-      pwd
-      ls -a .
-      echo "copy properties"
-      echo ${{ secrets.APP_SECRET_PROPERTIES }} >> ./application-secret.properties
+      # 최신 코드 가져오기
+      # git pull origin master
+      cd todo
+      echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
    # Gradle build 실행
    - name: Build with Gradle
      run: |
-      echo "ls -a . & pwd"
-      pwd
-      ls -a .
+      cd todo
       chmod +x ./gradlew
       ./gradlew clean build -x test
    # 빌드된 jar파일 확인   
