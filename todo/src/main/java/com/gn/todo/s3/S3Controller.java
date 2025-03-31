@@ -36,7 +36,8 @@ public class S3Controller {
 	private final AttachService attachService;
 	
 	@GetMapping("/download/{id}")
-	public ResponseEntity<Object> downloadFile(@PathVariable("id") Long id) {		
+	public ResponseEntity<Object> downloadFile(@PathVariable("id") Long id) {
+		System.out.println("테스트60");
 		try {
 			// 1. 파일 정보 조회
 			Attach fileData = attachService.selectAttachOne(id);
