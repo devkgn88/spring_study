@@ -47,7 +47,4 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.withType(Jar) {
-    archiveFileName = 'app.jar'  // 💡 JAR 파일 이름을 명시적으로 지정
-}
 
