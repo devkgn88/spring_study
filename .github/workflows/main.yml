@@ -21,9 +21,12 @@ jobs:
       java-version: '17'
    # Secrets 복사
    - name: Copy application-secret.properties
+     if: contains(github.ref, 'master')
      run: |
-      cd todo
-      sudo echo -e "${{ secrets.APP_SECRET_PROPERTIES }}" > src/main/resources/application-secret.properties
+      mkdir -p .todo/src/main/resources
+      cd .todo/src/main/resources
+      touch ./application-secret.properties
+      echo "${{ secrets.APP_SECRET_PROPERTIES }}" >> ./application-secret.properties
    # Gradle build 실행
    - name: Build with Gradle
      run: |
