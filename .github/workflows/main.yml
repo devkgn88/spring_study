@@ -31,6 +31,10 @@ jobs:
       touch ./application-secret.properties
       pwd
       ls -a .
+      echo "copy properties"
+      echo ${{ secrets.APP_SECRET_PROPERTIES }} >> ./application-secret.properties
+      cat application-secret.properties
+     shell: bash
    # Gradle build 실행
    - name: Build with Gradle
      run: |
