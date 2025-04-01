@@ -37,7 +37,7 @@ public class S3Controller {
 	
 	@GetMapping("/download/{id}")
 	public ResponseEntity<Object> downloadFile(@PathVariable("id") Long id) {
-		System.out.println("jenkins test23");
+		System.out.println("jenkins test24");
 		try {
 			// 1. 파일 정보 조회
 			Attach fileData = attachService.selectAttachOne(id);
