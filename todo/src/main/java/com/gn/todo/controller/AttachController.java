@@ -36,7 +36,7 @@ public class AttachController {
 	  
 	@GetMapping("/download/{id}") 
 	public ResponseEntity<Object> fileDownload(@PathVariable("id") Long id) {
-		System.out.println("테스트6");
+		System.out.println("테스트7");
 		try {
 			Attach fileData = attachService.selectAttachOne(id);
 			if(fileData == null) {
